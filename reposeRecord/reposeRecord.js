@@ -22,7 +22,7 @@ exports.getGuardId = async () => {
 	const updatedRecord = addSleepiestMins(record);
 	const sleepyGuard = getSleepyGuard(updatedRecord);
 
-	return sleepyGuard * record[sleepyGuard].sleepiestMin;
+	return +sleepyGuard * record[sleepyGuard].sleepiestMin;
 };
 
 // Additional Funcs Used
