@@ -1,13 +1,3 @@
-// timestamps year-month-day hour:minute
-
-// Date // ID // Minute ---> minutes asleep during midnight hr
-
-// awake === .
-// asleep === #
-
-// find the guard that has the most minutes asleep
-// What is the ID of the guard you chose multiplied by the minute you chose?
-
 const reposeRecord = (data) => {
 	const sortedUpdates = sortUpdates(data);
 	const record = {};
@@ -21,28 +11,27 @@ const reposeRecord = (data) => {
 			currentGuard = guardNum;
 			if (!record[guardNum]) {
 				record[guardNum] = {
-					num: +guardNum,
 					sleepyTime: 0,
 					minsAsleep: [],
-					timeAsleep: 0,
+					totalSleep: 0,
 				};
 			}
 		}
-		const [time] = update[0].match(/\d{2}:\d{2}/);
-		const hrsMins = time.split(":").map((time) => +time);
+		const [time] = update[0].match(/:\d{2}/);
+		const min = +time.slice(1);
 
 		const isAsleep = /(falls asleep)/.test(update[1]);
 		if (isAsleep) {
-			record[currentGuard].sleepyTime = +hrsMins[1];
+			record[currentGuard].sleepyTime = min;
 		}
 
 		const isAwake = /(wakes up)/.test(update[1]);
 		if (isAwake) {
 			const lastSleepTime = record[currentGuard].sleepyTime;
-			for (let i = lastSleepTime; i < hrsMins[1]; i++) {
+			for (let i = lastSleepTime; i < min; i++) {
 				record[currentGuard].minsAsleep.push(i);
 			}
-			record[currentGuard].timeAsleep += hrsMins[1] - lastSleepTime;
+			record[currentGuard].totalSleep += min - lastSleepTime;
 		}
 	});
 
@@ -51,8 +40,8 @@ const reposeRecord = (data) => {
 	let sleepyGuard;
 
 	for (let guard in record) {
-		if (record[guard].timeAsleep > sleepiest) {
-			sleepiest = record[guard].timeAsleep;
+		if (record[guard].totalSleep > sleepiest) {
+			sleepiest = record[guard].totalSleep;
 			sleepyGuard = guard;
 		}
 	}
@@ -82,7 +71,7 @@ const reposeRecord = (data) => {
 			mostFrequentTime = time;
 		}
 	}
-	return record[sleepyGuard].num * mostFrequentTime;
+	return +sleepyGuard * mostFrequentTime;
 };
 
 // sorting updates chronologically
