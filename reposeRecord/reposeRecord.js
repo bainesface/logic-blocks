@@ -50,11 +50,8 @@ const reposeRecord = (data) => {
 	// finding the most frequent sleepy slot
 	const times = record[sleepyGuard].minsAsleep.reduce(
 		(timesSoFar, currTime) => {
-			if (!timesSoFar[currTime]) {
-				timesSoFar[currTime] = 1;
-			} else {
-				timesSoFar[currTime]++;
-			}
+			if (!timesSoFar[currTime]) timesSoFar[currTime] = 1;
+			else timesSoFar[currTime]++;
 			return timesSoFar;
 		},
 		{}
@@ -69,6 +66,7 @@ const reposeRecord = (data) => {
 			mostFrequentTime = time;
 		}
 	}
+
 	return +sleepyGuard * mostFrequentTime;
 };
 
