@@ -6,7 +6,7 @@ const reposeRecord = (data) => {
 	// adding data to record object
 	sortedUpdates.forEach((update) => {
 		let guardNum = update[1].match(/\d/g);
-		if (guardNum !== null) {
+		if (guardNum) {
 			guardNum = guardNum.join("");
 			currentGuard = guardNum;
 			if (!record[guardNum]) {
@@ -21,9 +21,7 @@ const reposeRecord = (data) => {
 		const min = +time.slice(1);
 
 		const isAsleep = /(falls asleep)/.test(update[1]);
-		if (isAsleep) {
-			record[currentGuard].sleepyTime = min;
-		}
+		if (isAsleep) record[currentGuard].sleepyTime = min;
 
 		const isAwake = /(wakes up)/.test(update[1]);
 		if (isAwake) {
@@ -36,18 +34,18 @@ const reposeRecord = (data) => {
 	});
 
 	// getting the sleepiest guard
-	let sleepiest = 0;
+	let mostSleep = 0;
 	let sleepyGuard;
 
 	for (let guard in record) {
-		if (record[guard].totalSleep > sleepiest) {
-			sleepiest = record[guard].totalSleep;
+		if (record[guard].totalSleep > mostSleep) {
+			mostSleep = record[guard].totalSleep;
 			sleepyGuard = guard;
 		}
 	}
 
 	// return zero if no sleeping
-	if (!record[sleepyGuard]) return 0;
+	if (!sleepyGuard) return 0;
 
 	// finding the most frequent sleepy slot
 	const times = record[sleepyGuard].minsAsleep.reduce(
