@@ -1,5 +1,6 @@
 const { getData } = require("./data");
 
+// Part (Strategy) 1
 exports.reposeRecord = (data) => {
 	const sortedUpdates = sortUpdates(data);
 	const record = makeRecord(sortedUpdates);
@@ -13,6 +14,7 @@ exports.reposeRecord = (data) => {
 	return +sleepyGuard * mostFrequentTime;
 };
 
+// Part (Strategy) 2
 exports.getGuardId = async () => {
 	const data = await getData();
 	const sortedData = sortUpdates(data);
@@ -23,6 +25,7 @@ exports.getGuardId = async () => {
 	return sleepyGuard * record[sleepyGuard].sleepiestMin;
 };
 
+// Additional Funcs Used
 const sortUpdates = (data) => {
 	const guardUpdates = data.split("[");
 	guardUpdates.shift();
